@@ -1,0 +1,45 @@
+version: '3'
+services:
+  client:
+    build: client
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:<clickhuse>://db:5432/test_db
+      SPRING_DATASOURCE_USERNAME: clickhouse
+      SPRING_DATASOURCE_PASSWORD: clickhouse
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+
+  producer:
+    build: producer
+    restart: always
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:<clickhuse>://db:5432/test_db
+      SPRING_DATASOURCE_USERNAME: clickhouse
+      SPRING_DATASOURCE_PASSWORD: clickhouse
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+
+  db:
+    image: yandex/clickhouse-server
+    restart: always
+    ports:
+      - "8123:8123"
+    environment:
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: clickhouse
+      CLICKHOUSE_DB: test_db
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db

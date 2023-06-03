@@ -1,0 +1,1 @@
+Simple test project for docker, kafka and clickhouse
